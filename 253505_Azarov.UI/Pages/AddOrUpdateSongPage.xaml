@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_253505_Azarov.UI.Pages.AddOrUpdateSongPage"
+             xmlns:converters="clr-namespace:_253505_Azarov.UI.ValueConverters"
+             xmlns:models="clr-namespace:_253505_Azarov.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:entities="clr-namespace:_253505_Azarov.Domain.Entities;assembly=_253505_Azarov.Domain"
+             x:DataType="models:AddOrUpdateSongViewModel"
+             Title="Add or update song">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Loaded"
+            Command="{Binding UpdateArtistsListCommand }"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <converters:ValueToBooleanConverter x:Key="IsNotNull"/>
+    </ContentPage.Resources>
+
+    <StackLayout Margin="10" Spacing="15">
+        <HorizontalStackLayout>
+            <Button Text="Pick a png image!" Command="{Binding PickImageCommand}"/>
+            <Label Text="Succesfully added" IsVisible="{Binding Image, Converter={StaticResource IsNotNull}}"/>
+        </HorizontalStackLayout>
+        <VerticalStackLayout>
+            <Label Text="Title"/>
+            <Entry Text="{Binding Request.Song.Title}" Placeholder="Title"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <Label Text="Description"/>
+            <Entry Text="{Binding Request.Song.Description}" Placeholder="Description"/>
+        </VerticalStackLayout>
+    
+        <VerticalStackLayout>
+            <Label Text="Genre"/>
+            <Entry Text="{Binding Request.Song.Genre}" Placeholder="Genre"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <Label Text="Исполнитель"/>
+            <Picker
+                ItemsSource="{Binding Artists}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding Artist}">
+            </Picker>
+        </VerticalStackLayout>
+
+        <Button Text="Save" Command="{Binding AddOrUpdateSongCommand}"/>
+            <Label Text="{Binding ErrText}" />
+
+    </StackLayout>
+</ContentPage>

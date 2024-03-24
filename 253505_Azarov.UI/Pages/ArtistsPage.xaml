@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:_253505_Azarov.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:entities="clr-namespace:_253505_Azarov.Domain.Entities;assembly=253505_Azarov.Domain"
+             x:DataType="models:ArtistsViewModel"
+             xmlns:converters="clr-namespace:_253505_Azarov.UI.ValueConverters"
+             x:Class="_253505_Azarov.UI.Pages.ArtistsPage">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Loaded"
+            Command="{Binding UpdateArtistsListCommand }"/>
+        <toolkit:EventToCommandBehavior EventName="NavigatedTo"
+                                        Command="{Binding UpdateArtistsListCommand}"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <converters:PositionToColorValueConverter x:Key="PositionToColor"/>
+        <converters:ValueToBooleanConverter x:Key="IsNotNull"/>
+        <converters:IdToImageSourceConverter x:Key="IdToImageSource"/>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Edit artist" Command="{Binding UpdateArtistCommand}"></ToolbarItem>
+        <ToolbarItem Text="Delete artist" Command="{Binding DeleteArtistCommand}"></ToolbarItem>
+        <ToolbarItem Text="Add artist" Command="{Binding AddArtistCommand}"></ToolbarItem>
+        <ToolbarItem Text="Add song" Command="{Binding AddSongCommand}"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <StackLayout Margin="10" Spacing="15">
+        <Label Text="{Binding ErrorText}" />
+
+        <HorizontalStackLayout>
+            <Picker
+                ItemsSource="{Binding Artists}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedArtist}">
+                <Picker.Behaviors>
+                    <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
+                                                Command="{Binding UpdateSongsListCommand}"/>
+                </Picker.Behaviors>
+            </Picker>
+
+
+        </HorizontalStackLayout>
+        
+        <Label Text="{Binding SongsCount, StringFormat='Количество песен:{0}'}"/>
+
+        <Label Text="{Binding SongsCount, StringFormat='Описание:{0}'}"/>
+
+        <CollectionView  ItemsSource="{Binding Songs}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="entities:Song">
+                    <Frame Margin="5" Padding="5" BackgroundColor="{Binding Position, Converter={StaticResource PositionToColor}}">
+                       
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type models:ArtistsViewModel}},
+                                Path=ShowDetailsCommand}" 
+                                CommandParameter="{Binding}"/>
+                        </Frame.GestureRecognizers>
+
+                        <HorizontalStackLayout Spacing="3">
+
+
+                            <Frame Margin="5"
+                                   BorderColor="Black"
+                                   CornerRadius="50"
+                                   HeightRequest="110"
+                                   WidthRequest="110"
+                                   IsClippedToBounds="True" 
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center">
+                                <Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="70"
+                                    WidthRequest="70"
+                                Source="{Binding Id, Converter={StaticResource IdToImageSource}}"></Image>
+                            </Frame>
+                            <HorizontalStackLayout VerticalOptions="Center" Spacing="15">
+                                <Label Text="{Binding Title}" />
+                                <Label Text="{Binding Genre, StringFormat='Жанр:{0}'}" />
+                            </HorizontalStackLayout>
+                           
+                        </HorizontalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+    </StackLayout>
+</ContentPage>

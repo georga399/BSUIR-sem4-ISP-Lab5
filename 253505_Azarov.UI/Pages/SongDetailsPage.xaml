@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_253505_Azarov.UI.Pages.SongDetailsPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converters="clr-namespace:_253505_Azarov.UI.ValueConverters"
+             xmlns:models="clr-namespace:_253505_Azarov.UI.ViewModels"
+             xmlns:entities="clr-namespace:_253505_Azarov.Domain.Entities;assembly=253505_Azarov.Domain"
+             x:DataType="models:SongDetailsViewModel"
+             Title="Song details">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Edit" Command="{Binding UpdateSongCommand}"></ToolbarItem>
+        <ToolbarItem Text="Delete" Command="{Binding DeleteSongCommand}"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <VerticalStackLayout Margin="10" Spacing="15">
+        <Frame HorizontalOptions="Center" BackgroundColor="DarkSlateGray">
+            <VerticalStackLayout>
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Title:"/>
+                    <Label Text="{Binding Song.Title}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Song description:"/>
+                    <Label Text="{Binding Song.Description}"/>
+                </HorizontalStackLayout>
+                
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Artist:"/>
+                    <Label Text="{Binding Song.Artist.Name}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Position in chart:"/>
+                    <Label Text="{Binding Song.Position}"/>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </Frame>
+       
+    </VerticalStackLayout>
+</ContentPage>

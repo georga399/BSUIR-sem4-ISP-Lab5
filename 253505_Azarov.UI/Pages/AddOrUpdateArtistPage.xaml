@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_253505_Azarov.UI.Pages.AddOrUpdateArtistPage"
+             xmlns:converters="clr-namespace:_253505_Azarov.UI.ValueConverters"
+             xmlns:models="clr-namespace:_253505_Azarov.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:entities="clr-namespace:_253505_Azarov.Domain.Entities;assembly=_253505_Azarov.Domain"
+             x:DataType="models:AddOrUpdateArtistViewModel"
+             Title="Add or update artist">
+
+    <ContentPage.Resources>
+        <converters:ValueToBooleanConverter x:Key="IsNotNull"/>
+    </ContentPage.Resources>
+
+    <StackLayout Margin="10" Spacing="15">
+        <HorizontalStackLayout>
+            <Button Text="Pick a png image!" Command="{Binding PickImageCommand}"/>
+            <Label Text="Succesfully added" IsVisible="{Binding Image, Converter={StaticResource IsNotNull}}"/>
+        </HorizontalStackLayout>
+
+        <VerticalStackLayout>
+            <Label Text="Name"/>
+            <Entry Text="{Binding Request.Artist.Name}"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <Label Text="Description"/>
+            <Entry Text="{Binding Request.Artist.Description}" Placeholder="Description"/>
+        </VerticalStackLayout>
+
+        <Button Text="Save" Command="{Binding AddOrUpdateArtistCommand}"/>
+
+    </StackLayout>
+</ContentPage>
