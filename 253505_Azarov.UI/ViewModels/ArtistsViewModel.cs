@@ -19,9 +19,9 @@ public partial class ArtistsViewModel: ObservableObject
     public ObservableCollection<Song> Songs { get; set; } = new();
     
     [ObservableProperty]
-    Artist selectedArtist; 
+    Artist selectedArtist = new(); 
     [ObservableProperty]
-    Song selectedSong;
+    Song selectedSong = new();
     [ObservableProperty]
     int songsCount;
     [ObservableProperty]
@@ -46,20 +46,28 @@ public partial class ArtistsViewModel: ObservableObject
             .GoToAsync(nameof(SongDetailsPage), parameters);
     }
     [RelayCommand]
-    private async Task AddArtist() => 
+    private async Task AddArtist()
+    {
         await GotoAddOrUpdatePage(nameof(AddOrUpdateArtistPage), new AddArtistCommand(){Artist = new Artist()});
+    } 
 
     [RelayCommand]
-    private async Task UpdateArtist() => 
+    private async Task UpdateArtist()  
+    {
+        if(SelectedArtist is null)
+            return;
         await GotoAddOrUpdatePage(nameof(AddOrUpdateArtistPage), new UpdateArtistCommand(){Artist = SelectedArtist});
-
+    }
 
 
 
     [RelayCommand]
-    private async Task AddSong() => 
+    private async Task AddSong()
+    {
+        if(SelectedArtist is null)
+            return;
         await GotoAddOrUpdatePage(nameof(AddOrUpdateSongPage), new AddSongCommand(){Song = new Song()});
-    
+    }
     private async Task GotoAddOrUpdatePage(string route, IRequest request)
     {
         IDictionary<string, object> parameters = 
@@ -73,10 +81,16 @@ public partial class ArtistsViewModel: ObservableObject
     }
 
     [RelayCommand]
-    private async Task DeleteArtist() => await DeleteArtistAction();
+    private async Task DeleteArtist()
+    {
+        if(SelectedArtist is null)
+            return;
+        await DeleteArtistAction();
+    }
     private async Task DeleteArtistAction() //TODO: Update page
     {
         await _mediator.Send(new DeleteArtistCommand(SelectedArtist));
+        await GetArtists();
     }
     public async Task GetArtists()
     {
@@ -90,22 +104,19 @@ public partial class ArtistsViewModel: ObservableObject
     }
     public async Task GetSongs()
     {
-        try
+        if(SelectedArtist is null)
         {
-            var songs = await _mediator.Send(new
-            GetSongsByArtistIdQuery(SelectedArtist.Id));
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                Songs.Clear();
-                foreach (var song in songs)
-                    Songs.Add(song);
-                SongsCount = Songs.Count;
-            });
+            Songs.Clear();
+            return;
         }
-        catch(Exception ex)
+        var songs = await _mediator.Send(new
+        GetSongsByArtistIdQuery(SelectedArtist.Id));
+        await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            ErrorText = ex.Message  + ex.Source;
-
-        }
+            Songs.Clear();
+            foreach (var song in songs)
+                Songs.Add(song);
+            SongsCount = Songs.Count;
+        });
     }
 }

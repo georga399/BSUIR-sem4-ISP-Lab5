@@ -8,7 +8,7 @@ internal class PositionToColorValueConverter : IValueConverter
         if ((int)value < 6)
             return Colors.LightPink;
 
-        return Colors.WhiteSmoke;
+        return Colors.DarkSlateGray;
     }
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {

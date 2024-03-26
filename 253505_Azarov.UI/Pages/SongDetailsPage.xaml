@@ -8,31 +8,49 @@
              xmlns:entities="clr-namespace:_253505_Azarov.Domain.Entities;assembly=253505_Azarov.Domain"
              x:DataType="models:SongDetailsViewModel"
              Title="Song details">
+
+    <ContentPage.Resources>
+        <converters:IdToImageSourceConverter x:Key="IdToImageSource"/>
+    </ContentPage.Resources>
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                                        Command="{Binding GetSongByIdCommand}"/>
+    </ContentPage.Behaviors>
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Edit" Command="{Binding UpdateSongCommand}"></ToolbarItem>
         <ToolbarItem Text="Delete" Command="{Binding DeleteSongCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
+
     <VerticalStackLayout Margin="10" Spacing="15">
+
+        <Image
+            Aspect="AspectFill"
+            HeightRequest="70"
+            WidthRequest="70"
+        Source="{Binding SongId, Converter={StaticResource IdToImageSource}}"></Image>
+
         <Frame HorizontalOptions="Center" BackgroundColor="DarkSlateGray">
             <VerticalStackLayout>
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                     <Label Text="Title:"/>
-                    <Label Text="{Binding Song.Title}"/>
+                    <Label Text="{Binding SongTitle}"/>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                     <Label Text="Song description:"/>
-                    <Label Text="{Binding Song.Description}"/>
+                    <Label Text="{Binding SongDescription}"/>
                 </HorizontalStackLayout>
                 
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                     <Label Text="Artist:"/>
-                    <Label Text="{Binding Song.Artist.Name}"/>
+                    <Label Text="{Binding SongArtistName}"/>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                     <Label Text="Position in chart:"/>
-                    <Label Text="{Binding Song.Position}"/>
+                    <Label Text="{Binding SongPosition}"/>
                 </HorizontalStackLayout>
 
             </VerticalStackLayout>

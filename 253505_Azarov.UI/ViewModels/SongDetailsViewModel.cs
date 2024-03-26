@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using _253505_Azarov.Application.SongUseCases.Commands;
 using _253505_Azarov.UI.Pages;
 using _253505_Azarov.Application.SongUseCases;
+using _253505_Azarov.Application.SongUseCases.Queries;
 namespace _253505_Azarov.UI.ViewModels;
 
 [QueryProperty("Song", "Song")]
@@ -14,9 +15,34 @@ public partial class SongDetailsViewModel: ObservableObject
     {
         _mediator = mediator;
     }
-
     [ObservableProperty]
     Song song;
+
+    [ObservableProperty]
+    string songTitle;
+    [ObservableProperty]
+    string songDescription;
+    [ObservableProperty]
+    int songPosition;
+    [ObservableProperty]
+    string songGenre;
+    [ObservableProperty]
+    string songArtistName;
+    [ObservableProperty]
+    int songId;
+    [RelayCommand]
+    async void GetSongById()
+    {
+        Song = await _mediator.Send(new GetSongByIdQuery(Song.Id));
+        if(Song is null)
+            return;
+        SongTitle = Song.Title;    
+        SongDescription = Song.Description;
+        SongPosition = Song.Position;
+        SongGenre = Song.Genre;
+        SongArtistName = Song.Artist.Name;
+        // SongId = Song.Id;
+    }
 
     [RelayCommand]
     async Task UpdateSong() => 

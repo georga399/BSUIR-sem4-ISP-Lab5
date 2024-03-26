@@ -9,10 +9,8 @@
              x:Class="_253505_Azarov.UI.Pages.ArtistsPage">
 
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior EventName="Loaded"
-            Command="{Binding UpdateArtistsListCommand }"/>
-        <toolkit:EventToCommandBehavior EventName="NavigatedTo"
-                                        Command="{Binding UpdateArtistsListCommand}"/>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+            Command="{Binding UpdateArtistsListCommand}"/>
     </ContentPage.Behaviors>
 
     <ContentPage.Resources>
@@ -31,25 +29,41 @@
     <StackLayout Margin="10" Spacing="15">
         <Label Text="{Binding ErrorText}" />
 
-        <HorizontalStackLayout>
+        <HorizontalStackLayout >
             <Picker
                 ItemsSource="{Binding Artists}"
                 ItemDisplayBinding="{Binding Name}"
+                Title="Artist"
                 SelectedItem="{Binding SelectedArtist}">
+                
                 <Picker.Behaviors>
                     <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
                                                 Command="{Binding UpdateSongsListCommand}"/>
                 </Picker.Behaviors>
             </Picker>
 
-
         </HorizontalStackLayout>
         
-        <Label Text="{Binding SongsCount, StringFormat='Количество песен:{0}'}"/>
+        <Frame BackgroundColor="DarkSlateGray" IsVisible="{Binding SelectedArtist, Converter={StaticResource IsNotNull}}">
+            <VerticalStackLayout>
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
 
-        <Label Text="{Binding SongsCount, StringFormat='Описание:{0}'}"/>
+                    <Label Text="{Binding SelectedArtist.Name, StringFormat='Исполнитель: {0}'}"/>
+                </HorizontalStackLayout>
 
-        <CollectionView  ItemsSource="{Binding Songs}">
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="{Binding SelectedArtist.Description, StringFormat='Описание: {0}'}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="{Binding SelectedArtist.Songs.Count, StringFormat='Количество песен: {0}'}"/>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </Frame>
+
+
+        <CollectionView  ItemsSource="{Binding Songs}" VerticalOptions="FillAndExpand">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="entities:Song">
                     <Frame Margin="5" Padding="5" BackgroundColor="{Binding Position, Converter={StaticResource PositionToColor}}">
@@ -78,10 +92,11 @@
                                     WidthRequest="70"
                                 Source="{Binding Id, Converter={StaticResource IdToImageSource}}"></Image>
                             </Frame>
-                            <HorizontalStackLayout VerticalOptions="Center" Spacing="15">
+                            <VerticalStackLayout VerticalOptions="Center" Spacing="15">
                                 <Label Text="{Binding Title}" />
                                 <Label Text="{Binding Genre, StringFormat='Жанр:{0}'}" />
-                            </HorizontalStackLayout>
+                                <Label Text="{Binding Position, StringFormat='Место в чарте:{0}'}" />
+                            </VerticalStackLayout>
                            
                         </HorizontalStackLayout>
                     </Frame>

@@ -17,6 +17,7 @@ public partial class AddOrUpdateSongViewModel : ObservableObject, IQueryAttribut
     }
     [ObservableProperty]
     string errText;
+    Artist _artist;
     [ObservableProperty]
     Artist artist = new();
 
@@ -29,16 +30,17 @@ public partial class AddOrUpdateSongViewModel : ObservableObject, IQueryAttribut
     [RelayCommand]
     public async void PickImage()
     {
-        var customFileType = new FilePickerFileType(
-            new Dictionary<DevicePlatform, IEnumerable<string>>
-            {
-                { DevicePlatform.Android, new[] { ".png" } }, 
-            });
+        // var customFileType = new FilePickerFileType(
+        //     new Dictionary<DevicePlatform, IEnumerable<string>>
+        //     {
+        //         { DevicePlatform.Android, new[] { ".png" } }, 
+        //     });
 
         PickOptions options = new()
         {
             PickerTitle = "Please select a png image",
-            FileTypes = customFileType,
+            // FileTypes = customFileType,
+            FileTypes = FilePickerFileType.Images
         };
 
         try
@@ -46,10 +48,10 @@ public partial class AddOrUpdateSongViewModel : ObservableObject, IQueryAttribut
             var result = await FilePicker.Default.PickAsync(options);
             if (result != null)
             {
-                if (result.FileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-                {
+                // if (result.FileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                // {
                     Image = result;
-                }
+                // }
             }
         }
 
@@ -85,7 +87,8 @@ public partial class AddOrUpdateSongViewModel : ObservableObject, IQueryAttribut
             using var stream = await Image.OpenReadAsync();
             var image = ImageSource.FromStream(() => stream);
 
-            string filename = Path.Combine(Preferences.Default.Get<string>("LocalData", null), $"{Request.Song.Id}.png");
+            string filename = Path.Combine(FileSystem.AppDataDirectory, 
+                "Images","Songs", $"{Request.Song.Id}.png");
 
             using var fileStream = File.Create(filename);
             stream.Seek(0, SeekOrigin.Begin);
@@ -107,10 +110,11 @@ public partial class AddOrUpdateSongViewModel : ObservableObject, IQueryAttribut
             foreach (var artist in artists)
                 Artists.Add(artist);
         });
+        Artist = _artist;
     }
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         Request = query["Request"] as IAddOrUpdateSongRequest;
-        Artist = query["Artist"] as Artist;
+        _artist = query["Artist"] as Artist;
     }
 }

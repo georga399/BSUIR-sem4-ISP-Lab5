@@ -8,14 +8,8 @@ internal class IdToImageSourceConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         int id = (int)value;
-        string path = Preferences.Default.Get<string>("LocalData", null);
 
-        if (path == null)
-        {
-            return ImageSource.FromFile("dotnet_bot.png");
-        }
-
-
+        string path = Path.Combine(FileSystem.AppDataDirectory, "Images", "Songs") ;
         string fname = $"{id}.png";
         string imagePath = Path.Combine(path, fname);
 

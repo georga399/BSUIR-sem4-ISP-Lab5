@@ -22,6 +22,7 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("FontAwesome.ttf", "FontAwesome");
             });
 
         // var a = Assembly.GetExecutingAssembly();
@@ -30,6 +31,7 @@ public static class MauiProgram
 
         // var connStr = builder.Configuration
         //     .GetConnectionString("SqliteConnection");
+
         var connStr = " Data Source = {0}sqlite.db";
         string dataDirectory = FileSystem.Current.AppDataDirectory + "/";
         connStr = String.Format(connStr, dataDirectory);
@@ -41,7 +43,8 @@ public static class MauiProgram
             .AddApplication()
             .AddPersistense(options)
             .RegisterPages()
-            .RegisterViewModels();
+            .RegisterViewModels()
+            .CreateImageFolders();
 
 #if DEBUG
         builder.Logging.AddDebug();

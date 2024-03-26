@@ -21,7 +21,7 @@
 
         <VerticalStackLayout>
             <Label Text="Name"/>
-            <Entry Text="{Binding Request.Artist.Name}"/>
+            <Entry Text="{Binding Request.Artist.Name}" Placeholder="Name"/>
         </VerticalStackLayout>
 
         <VerticalStackLayout>

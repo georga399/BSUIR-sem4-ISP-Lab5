@@ -19,10 +19,10 @@
     </ContentPage.Resources>
 
     <StackLayout Margin="10" Spacing="15">
-        <HorizontalStackLayout>
+        <VerticalStackLayout>
             <Button Text="Pick a png image!" Command="{Binding PickImageCommand}"/>
             <Label Text="Succesfully added" IsVisible="{Binding Image, Converter={StaticResource IsNotNull}}"/>
-        </HorizontalStackLayout>
+        </VerticalStackLayout>
         <VerticalStackLayout>
             <Label Text="Title"/>
             <Entry Text="{Binding Request.Song.Title}" Placeholder="Title"/>
@@ -36,6 +36,11 @@
         <VerticalStackLayout>
             <Label Text="Genre"/>
             <Entry Text="{Binding Request.Song.Genre}" Placeholder="Genre"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <Label Text="Позиция в чарте"/>
+            <Entry Text="{Binding Request.Song.Position}" Keyboard="Numeric"/>
         </VerticalStackLayout>
 
         <VerticalStackLayout>

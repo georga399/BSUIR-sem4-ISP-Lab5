@@ -13,9 +13,9 @@ public static class DbInitializer
         // Добавить artists 
         IReadOnlyList<Artist> artists = new List<Artist>()
             {
-            new (){Name="Eminem", Description="white rapper." },
+            new (){Name="Eminem", Description="Popular rapper." },
             new (){Name="Blur", Description="rock group." },
-            new (){Name="Ice cube", Description="Black rapper." },
+            new (){Name="Ice cube", Description="Also popular rapper." },
             };
 
         foreach (var artist in artists)
